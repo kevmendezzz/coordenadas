@@ -1,0 +1,61 @@
+---
+// src/components/LoveLetter.astro
+---
+
+<div class="flex items-center justify-center min-h-[400px] py-20 perspective-container bg-[#ffffff]">
+  <div id="envelope" class="relative w-80 h-52 bg-red-700 rounded-md shadow-2xl mt-24 cursor-pointer group transition-transform duration-700">
+    
+    <div class="card absolute left-1/2 -translate-x-1/2 bottom-2 w-[90%] h-[90%] bg-[#F4F2ED] rounded-sm shadow-md transition-all duration-[1500ms] ease-in-out z-10 flex flex-col items-center justify-center p-4 text-center">
+      <p class="font-serif text-gray-800 text-sm leading-relaxed">
+        26 de septiembre <br>
+        <span class="text-red-600 font-bold">el día que nos conocimos</span>
+      </p>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-0 h-0 border-l-[160px] border-r-[160px] border-b-[110px] border-l-transparent border-r-transparent border-b-red-600 z-20 rounded-b-md"></div>
+
+    <div class="flap absolute top-0 left-0 w-0 h-0 border-l-[160px] border-r-[160px] border-t-[110px] border-l-transparent border-r-transparent border-t-red-800 origin-top transition-transform duration-1000 ease-in-out z-30 rounded-t-md"></div>
+    
+  </div>
+</div>
+
+<style>
+  /* Agregamos perspectiva para que el efecto 3D se vea realista */
+  .perspective-container {
+    perspective: 1000px;
+  }
+
+  /* --- ESTADOS OPEN (CSS Estándar para evitar errores de @apply) --- */
+
+  /* 1. La solapa gira 180 grados en el eje X */
+  #envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 0; /* Se va al fondo */
+  }
+
+  /* 2. La carta sube (8rem equivale a translate-y-32 de Tailwind) */
+  #envelope.open .card {
+    transform: translateY(-8rem); /* Negativo para subir */
+    z-index: 40; /* Se pone encima del bolsillo */
+  }
+</style>
+
+<script>
+  const envelope = document.getElementById('envelope');
+
+  if (envelope) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          envelope.classList.add('open');
+        } else {
+          envelope.classList.remove('open');
+        }
+      });
+    }, {
+      threshold: 0.5 
+    });
+
+    observer.observe(envelope);
+  }
+</script>
